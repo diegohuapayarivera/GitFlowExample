@@ -18,6 +18,8 @@ public class EstudianteControlador {
 	@Autowired
 	private EstudianteServicio servicio;
 
+	static final String link_estudiante = "redirect:/estudiantes";
+
 	@GetMapping({ "/estudiantes", "/" })
 	public String listarEstudiantes(Model modelo) {
 		modelo.addAttribute("estudiantes", servicio.listarTodosLosEstudiantes());
@@ -34,7 +36,7 @@ public class EstudianteControlador {
 	@PostMapping("/estudiantes")
 	public String guardarEstudiante(@ModelAttribute("estudiante") EstudianteDTO estudianteDTO) {
 		servicio.guardarEstudiante(estudianteDTO);
-		return "redirect:/estudiantes";
+		return link_estudiante;
 	}
 
 	@GetMapping("/estudiantes/editar/{id}")
@@ -46,13 +48,14 @@ public class EstudianteControlador {
 	@PostMapping("/estudiantes/{id}")
 	public String actualizarEstudiante(@PathVariable Long id, @ModelAttribute("estudiante") EstudianteDTO estudianteDTO,
 			Model modelo) {
+		estudianteDTO.setId(id);
 		servicio.actualizarEstudiante(estudianteDTO);
-		return "redirect:/estudiantes";
+		return link_estudiante;
 	}
 
 	@GetMapping("/estudiantes/{id}")
 	public String eliminarEstudiante(@PathVariable Long id) {
 		servicio.eliminarEstudiante(id);
-		return "redirect:/estudiantes";
+		return link_estudiante;
 	}
 }
