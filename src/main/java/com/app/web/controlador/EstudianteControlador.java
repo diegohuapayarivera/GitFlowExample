@@ -1,5 +1,6 @@
 package com.app.web.controlador;
 
+import com.app.web.dto.EstudianteDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,8 +32,8 @@ public class EstudianteControlador {
 	}
 
 	@PostMapping("/estudiantes")
-	public String guardarEstudiante(@ModelAttribute("estudiante") Estudiante estudiante) {
-		servicio.guardarEstudiante(estudiante);
+	public String guardarEstudiante(@ModelAttribute("estudiante") EstudianteDTO estudianteDTO) {
+		servicio.guardarEstudiante(estudianteDTO);
 		return "redirect:/estudiantes";
 	}
 
@@ -43,15 +44,9 @@ public class EstudianteControlador {
 	}
 
 	@PostMapping("/estudiantes/{id}")
-	public String actualizarEstudiante(@PathVariable Long id, @ModelAttribute("estudiante") Estudiante estudiante,
+	public String actualizarEstudiante(@PathVariable Long id, @ModelAttribute("estudiante") EstudianteDTO estudianteDTO,
 			Model modelo) {
-		Estudiante estudianteExistente = servicio.obtenerEstudiantePorId(id);
-		estudianteExistente.setId(id);
-		estudianteExistente.setNombre(estudiante.getNombre());
-		estudianteExistente.setApellido(estudiante.getApellido());
-		estudianteExistente.setEmail(estudiante.getEmail());
-
-		servicio.actualizarEstudiante(estudianteExistente);
+		servicio.actualizarEstudiante(estudianteDTO);
 		return "redirect:/estudiantes";
 	}
 
