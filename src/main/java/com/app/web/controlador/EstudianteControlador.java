@@ -46,8 +46,7 @@ public class EstudianteControlador {
 	}
 
 	@PostMapping("/estudiantes/{id}")
-	public String actualizarEstudiante(@PathVariable Long id, @ModelAttribute("estudiante") EstudianteDTO estudianteDTO,
-			Model modelo) {
+	public String actualizarEstudiante(@PathVariable Long id, @ModelAttribute("estudiante") EstudianteDTO estudianteDTO) {
 		estudianteDTO.setId(id);
 		servicio.actualizarEstudiante(estudianteDTO);
 		return link_estudiante;

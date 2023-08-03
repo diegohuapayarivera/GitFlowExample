@@ -33,13 +33,18 @@ public class EstudianteServicioImpl implements EstudianteServicio {
     }
 
     @Override
-    public boolean obtenerEstudiantePorId(Long id) {
+    public Estudiante obtenerEstudiantePorId(Long id) {
+        return repositorio.findById(id).get();
+    }
+
+    @Override
+    public boolean validarEstudianteExiste(Long id) {
         return repositorio.findById(id).isPresent();
     }
 
     @Override
     public Estudiante actualizarEstudiante(EstudianteDTO estudianteDTO) {
-        if (this.obtenerEstudiantePorId(estudianteDTO.getId())) {
+        if (this.validarEstudianteExiste(estudianteDTO.getId())) {
             Estudiante estudianteExistente = modelMapper.map(estudianteDTO, Estudiante.class);
             return repositorio.save(estudianteExistente);
         }
