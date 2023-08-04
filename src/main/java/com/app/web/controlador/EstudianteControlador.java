@@ -1,5 +1,6 @@
 package com.app.web.controlador;
 
+import com.app.web.dto.EstudianteDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +18,8 @@ public class EstudianteControlador {
 	@Autowired
 	private EstudianteServicio servicio;
 
+	static final String link_estudiante = "redirect:/estudiantes";
+
 	@GetMapping({ "/estudiantes", "/" })
 	public String listarEstudiantes(Model modelo) {
 		modelo.addAttribute("estudiantes", servicio.listarTodosLosEstudiantes());
@@ -31,9 +34,9 @@ public class EstudianteControlador {
 	}
 
 	@PostMapping("/estudiantes")
-	public String guardarEstudiante(@ModelAttribute("estudiante") Estudiante estudiante) {
-		servicio.guardarEstudiante(estudiante);
-		return "redirect:/estudiantes";
+	public String guardarEstudiante(@ModelAttribute("estudiante") EstudianteDTO estudianteDTO) {
+		servicio.guardarEstudiante(estudianteDTO);
+		return link_estudiante;
 	}
 
 	@GetMapping("/estudiantes/editar/{id}")
@@ -43,21 +46,15 @@ public class EstudianteControlador {
 	}
 
 	@PostMapping("/estudiantes/{id}")
-	public String actualizarEstudiante(@PathVariable Long id, @ModelAttribute("estudiante") Estudiante estudiante,
-			Model modelo) {
-		Estudiante estudianteExistente = servicio.obtenerEstudiantePorId(id);
-		estudianteExistente.setId(id);
-		estudianteExistente.setNombre(estudiante.getNombre());
-		estudianteExistente.setApellido(estudiante.getApellido());
-		estudianteExistente.setEmail(estudiante.getEmail());
-
-		servicio.actualizarEstudiante(estudianteExistente);
-		return "redirect:/estudiantes";
+	public String actualizarEstudiante(@PathVariable Long id, @ModelAttribute("estudiante") EstudianteDTO estudianteDTO) {
+		estudianteDTO.setId(id);
+		servicio.actualizarEstudiante(estudianteDTO);
+		return link_estudiante;
 	}
 
 	@GetMapping("/estudiantes/{id}")
 	public String eliminarEstudiante(@PathVariable Long id) {
 		servicio.eliminarEstudiante(id);
-		return "redirect:/estudiantes";
+		return link_estudiante;
 	}
 }

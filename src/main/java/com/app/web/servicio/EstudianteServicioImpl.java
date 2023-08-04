@@ -1,7 +1,12 @@
 package com.app.web.servicio;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
+import com.app.web.dto.EstudianteDTO;
+import org.apache.catalina.mapper.Mapper;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,33 +16,45 @@ import com.app.web.repositorio.EstudianteRepositorio;
 @Service
 public class EstudianteServicioImpl implements EstudianteServicio {
 
-	@Autowired
-	private EstudianteRepositorio repositorio;
+    @Autowired
+    private EstudianteRepositorio repositorio;
 
-	@Override
-	public List<Estudiante> listarTodosLosEstudiantes() {
-		return repositorio.findAll();
-	}
+    ModelMapper modelMapper = new ModelMapper();
 
-	@Override
-	public Estudiante guardarEstudiante(Estudiante estudiante) {
-		return repositorio.save(estudiante);
-	}
+    @Override
+    public List<EstudianteDTO> listarTodosLosEstudiantes() {
+        return repositorio.findAll().stream().map(estudiantes -> modelMapper.map(estudiantes, EstudianteDTO.class)).collect(Collectors.toList());
+    }
 
-	@Override
-	public Estudiante obtenerEstudiantePorId(Long id) {
-		return repositorio.findById(id).get();
-	}
+    @Override
+    public Estudiante guardarEstudiante(EstudianteDTO estudianteDTO) {
+        Estudiante estudianteNuevo = modelMapper.map(estudianteDTO, Estudiante.class);
+        return repositorio.save(estudianteNuevo);
+    }
 
-	@Override
-	public Estudiante actualizarEstudiante(Estudiante estudiante) {
-		return repositorio.save(estudiante);
-	}
+    @Override
+    public Estudiante obtenerEstudiantePorId(Long id) {
+        return repositorio.findById(id).get();
+    }
 
-	@Override
-	public void eliminarEstudiante(Long id) {
-		repositorio.deleteById(id);
+    @Override
+    public boolean validarEstudianteExiste(Long id) {
+        return repositorio.findById(id).isPresent();
+    }
 
-	}
+    @Override
+    public Estudiante actualizarEstudiante(EstudianteDTO estudianteDTO) {
+        if (this.validarEstudianteExiste(estudianteDTO.getId())) {
+            Estudiante estudianteExistente = modelMapper.map(estudianteDTO, Estudiante.class);
+            return repositorio.save(estudianteExistente);
+        }
+        return null;
+    }
+
+    @Override
+    public void eliminarEstudiante(Long id) {
+        repositorio.deleteById(id);
+
+    }
 
 }
