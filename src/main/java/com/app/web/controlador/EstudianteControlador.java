@@ -20,39 +20,39 @@ public class EstudianteControlador {
 
 	static final String link_estudiante = "redirect:/estudiantes";
 
-	@GetMapping({ "/estudiantes", "/" })
+	@GetMapping({ "/estudiante", "/" })
 	public String listarEstudiantes(Model modelo) {
 		modelo.addAttribute("estudiantes", servicio.listarTodosLosEstudiantes());
 		return "estudiantes"; // nos retorna al archivo estudiantes
 	}
 
-	@GetMapping("/estudiantes/nuevo")
+	@GetMapping("/estudiante/nuevo")
 	public String mostrarFormularioDeRegistrtarEstudiante(Model modelo) {
 		Estudiante estudiante = new Estudiante();
 		modelo.addAttribute("estudiante", estudiante);
 		return "crear_estudiante";
 	}
 
-	@PostMapping("/estudiantes")
+	@PostMapping("/estudiante")
 	public String guardarEstudiante(@ModelAttribute("estudiante") EstudianteDTO estudianteDTO) {
 		servicio.guardarEstudiante(estudianteDTO);
 		return link_estudiante;
 	}
 
-	@GetMapping("/estudiantes/editar/{id}")
+	@GetMapping("/estudiante/editar/{id}")
 	public String mostrarFormularioDeEditar(@PathVariable Long id, Model modelo) {
 		modelo.addAttribute("estudiante", servicio.obtenerEstudiantePorId(id));
 		return "editar_estudiante";
 	}
 
-	@PostMapping("/estudiantes/{id}")
+	@PostMapping("/estudiante/{id}")
 	public String actualizarEstudiante(@PathVariable Long id, @ModelAttribute("estudiante") EstudianteDTO estudianteDTO) {
 		estudianteDTO.setId(id);
 		servicio.actualizarEstudiante(estudianteDTO);
 		return link_estudiante;
 	}
 
-	@GetMapping("/estudiantes/{id}")
+	@GetMapping("/estudiante/{id}")
 	public String eliminarEstudiante(@PathVariable Long id) {
 		servicio.eliminarEstudiante(id);
 		return link_estudiante;
