@@ -11,9 +11,11 @@ public interface EstudianteServicio {
 	
 	public Estudiante guardarEstudiante(EstudianteDTO estudianteDTO);
 	
-	public boolean obtenerEstudiantePorId(Long id);
+	public Estudiante obtenerEstudiantePorId(Long id);
 	
 	public Estudiante actualizarEstudiante(EstudianteDTO estudianteDTO);
-	
+
+	public boolean validarEstudianteExiste(Long id);
+
 	public void eliminarEstudiante(Long id);
 }
