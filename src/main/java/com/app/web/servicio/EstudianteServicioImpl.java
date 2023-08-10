@@ -23,12 +23,25 @@ public class EstudianteServicioImpl implements EstudianteServicio {
 
     @Override
     public List<EstudianteDTO> listarTodosLosEstudiantes() {
-        return repository.findAll().stream().map(estudiantes -> modelMapper.map(estudiantes, EstudianteDTO.class)).collect(Collectors.toList());
+        //return repository.findAll().stream().map(estudiantes -> modelMapper.map(estudiantes, EstudianteDTO.class)).collect(Collectors.toList());
+        return repository.findAll().stream().map(estudiantes -> {
+            EstudianteDTO estudianteDTO = new EstudianteDTO();
+            estudianteDTO.setId(estudiantes.getId());
+            estudianteDTO.setNombre(estudiantes.getNombre());
+            estudianteDTO.setApellido(estudiantes.getApellido());
+            estudianteDTO.setEmail(estudiantes.getEmail());
+            return estudianteDTO;
+        }).collect(Collectors.toList());
     }
 
     @Override
     public Estudiante guardarEstudiante(EstudianteDTO estudianteDTO) {
-        Estudiante estudianteNuevo = modelMapper.map(estudianteDTO, Estudiante.class);
+        //Estudiante estudianteNuevo = modelMapper.map(estudianteDTO, Estudiante.class);
+        Estudiante estudianteNuevo = new Estudiante();
+        estudianteNuevo.setId(estudianteDTO.getId());
+        estudianteNuevo.setNombre(estudianteDTO.getNombre());
+        estudianteNuevo.setApellido(estudianteDTO.getApellido());
+        estudianteNuevo.setEmail(estudianteDTO.getEmail());
         return repository.save(estudianteNuevo);
     }
 
@@ -45,7 +58,12 @@ public class EstudianteServicioImpl implements EstudianteServicio {
     @Override
     public Estudiante actualizarEstudiante(EstudianteDTO estudianteDTO) {
         if (this.validarEstudianteExiste(estudianteDTO.getId())) {
-            Estudiante estudianteExistente = modelMapper.map(estudianteDTO, Estudiante.class);
+            //Estudiante estudianteExistente = modelMapper.map(estudianteDTO, Estudiante.class);
+            Estudiante estudianteExistente = new Estudiante();
+            estudianteExistente.setId(estudianteDTO.getId());
+            estudianteExistente.setNombre(estudianteDTO.getNombre());
+            estudianteExistente.setApellido(estudianteDTO.getApellido());
+            estudianteExistente.setEmail(estudianteDTO.getEmail());
             return repository.save(estudianteExistente);
         }
         return null;
