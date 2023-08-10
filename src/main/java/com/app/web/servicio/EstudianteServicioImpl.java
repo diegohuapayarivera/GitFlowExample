@@ -17,43 +17,61 @@ import com.app.web.repositorio.EstudianteRepositorio;
 public class EstudianteServicioImpl implements EstudianteServicio {
 
     @Autowired
-    private EstudianteRepositorio repositorio;
+    private EstudianteRepositorio repository;
 
     ModelMapper modelMapper = new ModelMapper();
 
     @Override
     public List<EstudianteDTO> listarTodosLosEstudiantes() {
-        return repositorio.findAll().stream().map(estudiantes -> modelMapper.map(estudiantes, EstudianteDTO.class)).collect(Collectors.toList());
+        //return repository.findAll().stream().map(estudiantes -> modelMapper.map(estudiantes, EstudianteDTO.class)).collect(Collectors.toList());
+        return repository.findAll().stream().map(estudiantes -> {
+            EstudianteDTO estudianteDTO = new EstudianteDTO();
+            estudianteDTO.setId(estudiantes.getId());
+            estudianteDTO.setNombre(estudiantes.getNombre());
+            estudianteDTO.setApellido(estudiantes.getApellido());
+            estudianteDTO.setEmail(estudiantes.getEmail());
+            return estudianteDTO;
+        }).collect(Collectors.toList());
     }
 
     @Override
     public Estudiante guardarEstudiante(EstudianteDTO estudianteDTO) {
-        Estudiante estudianteNuevo = modelMapper.map(estudianteDTO, Estudiante.class);
-        return repositorio.save(estudianteNuevo);
+        //Estudiante estudianteNuevo = modelMapper.map(estudianteDTO, Estudiante.class);
+        Estudiante estudianteNuevo = new Estudiante();
+        estudianteNuevo.setId(estudianteDTO.getId());
+        estudianteNuevo.setNombre(estudianteDTO.getNombre());
+        estudianteNuevo.setApellido(estudianteDTO.getApellido());
+        estudianteNuevo.setEmail(estudianteDTO.getEmail());
+        return repository.save(estudianteNuevo);
     }
 
     @Override
     public Estudiante obtenerEstudiantePorId(Long id) {
-        return repositorio.findById(id).get();
+        return repository.findById(id).get();
     }
 
     @Override
     public boolean validarEstudianteExiste(Long id) {
-        return repositorio.findById(id).isPresent();
+        return repository.findById(id).isPresent();
     }
 
     @Override
     public Estudiante actualizarEstudiante(EstudianteDTO estudianteDTO) {
         if (this.validarEstudianteExiste(estudianteDTO.getId())) {
-            Estudiante estudianteExistente = modelMapper.map(estudianteDTO, Estudiante.class);
-            return repositorio.save(estudianteExistente);
+            //Estudiante estudianteExistente = modelMapper.map(estudianteDTO, Estudiante.class);
+            Estudiante estudianteExistente = new Estudiante();
+            estudianteExistente.setId(estudianteDTO.getId());
+            estudianteExistente.setNombre(estudianteDTO.getNombre());
+            estudianteExistente.setApellido(estudianteDTO.getApellido());
+            estudianteExistente.setEmail(estudianteDTO.getEmail());
+            return repository.save(estudianteExistente);
         }
         return null;
     }
 
     @Override
     public void eliminarEstudiante(Long id) {
-        repositorio.deleteById(id);
+        repository.deleteById(id);
 
     }
 
